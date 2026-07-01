@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سیستەمی پێشکەوتووی حیساباتی کارەبا</title>
+  <title> بژمێری کارەبای یەکە و روناکی</title>
   <style>
     :root { 
       --primary:#7f2430; 
@@ -43,8 +43,6 @@
       border-bottom:1px solid rgba(82,45,25,.28); border-radius:18px 18px 0 0;
     }
     .main-title { text-align:center; color:var(--primary); font-size:26px; margin-bottom:25px; font-weight:800; letter-spacing:.2px; }
-    .page-credit { text-align:center; font-size:11px; color:var(--muted); margin-top:-10px; margin-bottom:18px; letter-spacing:.4px; }
-    .page-credit-bottom { text-align:center; margin-top:18px; margin-bottom:0; font-size:10px; opacity:.9; color:var(--muted); }
     .category-tabs { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:30px; }
     .tab {
       background:#f4eadc; border:1px solid rgba(127,36,48,.18); padding:14px 12px; font-size:15px; font-weight:700; color:#63453a;
@@ -54,8 +52,6 @@
     .tab.active { background:linear-gradient(135deg, var(--primary), var(--accent)); color:white; border-color:transparent; box-shadow:0 6px 16px rgba(127,36,48,.22); }
     
     .grid-layout { display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:25px; }
-    
-    /* مۆبایل و تابلێت */
     @media (max-width:1100px) { .grid-layout { grid-template-columns:1fr; } }
     
     .section-card { background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(248,240,225,.94)); border:1px solid rgba(127,36,48,.14); border-radius:14px; padding:24px; box-shadow:0 2px 10px rgba(0,0,0,.03); }
@@ -64,8 +60,9 @@
     .field-box label { font-size:13.5px; font-weight:700; margin-bottom:6px; color:#5a4137; }
     .field-box input, .field-box select { padding:12px 14px; border:1px solid rgba(127,36,48,.18); border-radius:8px; font-size:15px; outline:none; background:white; color:var(--text); transition:border-color .2s ease, box-shadow .2s ease; }
     .field-box input:focus, .field-box select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(127,36,48,.10); }
-    .checkbox-container { display:flex; align-items:center; gap:10px; margin-top:10px; cursor:pointer; font-weight:700; font-size:14px; color:#5a4137; }
-    .checkbox-container input { width:20px; height:20px; cursor:pointer; accent-color:var(--primary); }
+    
+    .checkbox-container { display:flex; align-items:center; gap:10px; margin-top:5px; margin-bottom:16px; cursor:pointer; font-weight:700; font-size:14.5px; color:var(--primary); background: rgba(127,36,48,.05); padding: 12px; border-radius: 8px; border: 1px dashed rgba(127,36,48,.20); }
+    .checkbox-container input { width:22px; height:22px; cursor:pointer; accent-color:var(--primary); }
     .output-highlight { background:#f4f1ea; font-weight:800; color:var(--primary); }
     
     .summary-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; margin-top:18px; }
@@ -98,7 +95,6 @@
     }
     .action-row .calc-btn { background: linear-gradient(135deg, var(--primary), #a03744); }
     .action-row .print-btn { background: linear-gradient(135deg, var(--accent), #2f8a87); }
-    .action-row .calc-btn:hover, .action-row .print-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,.16); }
     
     .split-note { font-size: 13px; color: var(--primary); font-weight: 700; background: rgba(127,36,48,.06); border: 1px dashed rgba(127,36,48,.18); border-radius: 10px; padding: 10px 12px; margin-top: 16px; }
     .print-receipt { display: none; background: white; color: #1f1a17; }
@@ -138,7 +134,7 @@
 </head>
 <body>
 <div class="dashboard-container">
-  <div class="main-title">بژمێری پێشکەوتووی کارەبا</div>
+  <div class="main-title">بژمێری  کارەبا</div>
   <div class="category-tabs">
     <button class="tab active" type="button" data-section="home" onclick="changeSection('home', event)">ماڵان (Home)</button>
     <button class="tab" type="button" data-section="commercial" onclick="changeSection('commercial', event)">بازرگانی (Commercial)</button>
@@ -156,14 +152,17 @@
       <div class="field-box"><label>ژمارەی بلۆک / زنجیرە:</label><input type="text" id="serialNumber" value=""></div>
       <div class="field-box"><label>پۆلی هاوبەش:</label><input type="text" id="customerCategory" placeholder="بنووسە..." value=""></div>
       <div class="field-box"><label>هاوکۆلکە (Factor):</label><input type="number" id="multiplier" value="1" min="0" step="0.01" oninput="executeCalculationEngine()"></div>
-      <label class="checkbox-container" id="transformerToggleRow" style="display:none;"><input type="checkbox" id="hasTransformer" onchange="executeCalculationEngine()"><span>چالاککردنی کرێی گۆڕەر 1.025×</span></label>
-      <div class="section-note" id="transformerHelp">ئەم هەڵبژاردنە تەنها بۆ ئەو 4 جۆرەی حیسابەیە کە کرێی گۆڕەریان پێوەیە.</div>
+      
+      <label class="checkbox-container" id="transformerToggleRow">
+        <input type="checkbox" id="hasTransformer" onchange="executeCalculationEngine()">
+        <span>کرێی گۆڕەر (1.025×)</span>
+      </label>
     </div>
     <div class="section-card">
       <div class="card-header">⚡ خوێندنەوە و ڕێکەوتەکان</div>
-      <div class="field-box"><label>خوێندنەوەی پێشوو:</label><input type="number" id="prevRead" value="1000" min="0" step="1" oninput="executeCalculationEngine()"></div>
+      <div class="field-box"><label>خوێندنەوەی پێشوو:</label><input type="number" id="prevRead" value="" min="0" step="1" oninput="executeCalculationEngine()"></div>
       <div class="field-box"><label>ڕێکەوتی خوێندنەوەی پێشوو:</label><input type="date" id="prevDate" value="2026-05-01" onchange="executeCalculationEngine()"></div>
-      <div class="field-box"><label>خوێندنەوەی نوێ:</label><input type="number" id="currRead" value="2450" min="0" step="1" oninput="executeCalculationEngine()"></div>
+      <div class="field-box"><label>خوێندنەوەی نوێ:</label><input type="number" id="currRead" value="" min="0" step="1" oninput="executeCalculationEngine()"></div>
       <div class="field-box"><label>ڕێکەوتی خوێندنەوەی نوێ:</label><input type="date" id="currDate" value="2026-06-01" onchange="executeCalculationEngine()"></div>
       <div class="field-box"><label>ڕێکەوتی چالاککردنی ڕووناکی:</label><input type="date" id="lightDate" value="2026-06-01" onchange="executeCalculationEngine()"></div>
       <div class="summary-grid">
@@ -206,14 +205,12 @@ const structuralMatrix = {
 var currentActiveSection = 'home';
 var numberFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
 var transformerFactor = 1.025;
-var transformerVisibleSections = new Set(['big_ind', 'ind', 'gov', 'agri']);
 
 const el = {};
 document.addEventListener('DOMContentLoaded', function() {
   const ids = ['customerName', 'accountnumber', 'meterNumber', 'serialNumber', 'customerCategory', 'multiplier', 'hasTransformer', 'transformerToggleRow', 'prevRead', 'prevDate', 'currRead', 'currDate', 'lightDate', 'daysCount', 'lightDaysCount', 'finalCalculatedUnits', 'finalTotalBox', 'matrixTableBody', 'grandSummaryDisplay', 'splitNote', 'receiptSectionBadge', 'receiptCustomerName', 'receiptAccountNumber', 'receiptCustomerCategory', 'receiptMeterNumber', 'receiptSerialNumber', 'receiptPrevDate', 'receiptCurrDate', 'receiptLightDate', 'receiptTotalDays', 'receiptMainDays', 'receiptLightDays', 'receiptTotalUnits', 'receiptPrevRead', 'receiptCurrRead', 'receiptMultiplier', 'receiptTransformerFee', 'receiptTableBody', 'receiptGrandTotal'];
   ids.forEach(id => el[id] = document.getElementById(id));
   
-  updateTransformerVisibility();
   executeCalculationEngine();
 });
 
@@ -223,18 +220,10 @@ function fmtMoney(v) { return Math.round(Number(v) || 0).toLocaleString('en-US')
 function parseDateValue(v) { if (!v) return null; var d = new Date(v + 'T00:00:00'); return isNaN(d.getTime()) ? null : d; }
 function diffDays(a, b) { if (!a || !b) return 0; return Math.max(0, Math.round((b - a) / 86400000)); }
 
-function updateTransformerVisibility() {
-  if (!el['transformerToggleRow']) return;
-  var visible = transformerVisibleSections.has(currentActiveSection);
-  el['transformerToggleRow'].style.display = visible ? 'block' : 'none';
-  if (!visible && el['hasTransformer']) el['hasTransformer'].checked = false;
-}
-
 function changeSection(sectionName, event) {
   currentActiveSection = sectionName;
   document.querySelectorAll('.tab').forEach(function(tab) { tab.classList.remove('active'); });
   if (event && event.target) event.target.classList.add('active');
-  updateTransformerVisibility();
   executeCalculationEngine();
 }
 
@@ -270,15 +259,29 @@ function buildPortionRows(title, bands, units, days, mode) {
     var scale = Math.max(0, days) / 30;
     for (var i = 0; i < bands.length; i++) {
       var band = bands[i];
-      var limit = band.cap == null ? remaining : Math.max(0, band.cap * scale);
-      var used = i === bands.length - 1 ? remaining : Math.min(remaining, limit);
-      if (used < 0) used = 0;
-      if (used > 0 || i === bands.length - 1) {
+      
+      // قۆناغی کۆتایی تەنها ئەوکاتە کار دەکات کە پاشماوەیەک مابێتەوە
+      if (band.cap == null) {
+        if (remaining > 0) {
+          var cost = remaining * band.rate;
+          subtotal += cost;
+          rows.push({ label: band.label, rate: band.rate, units: remaining, cost: cost });
+        }
+        break;
+      }
+      
+      var limit = Math.max(0, band.cap * scale);
+      var used = Math.min(remaining, limit);
+      
+      if (used > 0) {
         var cost = used * band.rate;
         subtotal += cost;
         rows.push({ label: band.label, rate: band.rate, units: used, cost: cost });
+        remaining -= used;
+      } else {
+        // ئەگەر هیچ یەکەیەک نەمابوو بۆ ئەم قۆناغە، باز باز بدە بەسەر قۆناغەکانی تردا
+        break;
       }
-      remaining -= used;
     }
   } else {
     var band0 = bands[0];
@@ -308,7 +311,8 @@ function executeCalculationEngine() {
   var data = structuralMatrix[currentActiveSection];
   var mainUnits = split.totalDays ? totalUnits * split.beforeDays / split.totalDays : totalUnits;
   var lightUnits = split.totalDays ? totalUnits - mainUnits : 0;
-  var transformerMultiplier = (el['hasTransformer'].checked && transformerVisibleSections.has(currentActiveSection)) ? transformerFactor : 1;
+  
+  var transformerMultiplier = (el['hasTransformer'] && el['hasTransformer'].checked) ? transformerFactor : 1;
 
   var mainPack = buildPortionRows('پێش ڕووناکی', data.normal, mainUnits, split.beforeDays, data.mode);
   var lightPack = buildPortionRows('دوای ڕووناکی', data.light, lightUnits, split.afterDays, data.mode);
@@ -322,8 +326,8 @@ function executeCalculationEngine() {
 
   el['matrixTableBody'].innerHTML = tableHtml || '<tr><td colspan="3">هیچ زانیارییەک نییە</td></tr>';
   el['grandSummaryDisplay'].textContent = fmtMoney(totalCost);
-  el['finalCalculatedUnits'].value = fmtUnits(totalUnits) + ' یەکە';
   el['finalTotalBox'].value = fmtMoney(totalCost) + ' دینار';
+  el['finalCalculatedUnits'].value = fmtUnits(totalUnits) + ' یەکە';
   el['daysCount'].value = fmtUnits(split.totalDays);
   el['lightDaysCount'].value = fmtUnits(split.afterDays);
   el['splitNote'].textContent = split.totalDays
@@ -363,8 +367,8 @@ function printReceipt() {
   <div class="receipt-sheet">
     <div class="receipt-header">
       <div>
-        <div class="receipt-title">بژمێری پێشکەوتووی کارەبا</div>
-        <div class="receipt-subtitle">پەڕگەی ژیار - حیسابی یەکە و ڕووناکی</div>
+        <div class="receipt-title">بژمێری کارەبا</div>
+        <div class="receipt-subtitle"> حیسابی یەکە و ڕووناکی</div>
       </div>
       <div class="receipt-badge" id="receiptSectionBadge">ماڵان (Home)</div>
     </div>
