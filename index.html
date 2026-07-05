@@ -5,126 +5,192 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title> بژمێری کارەبای یەکە و روناکی</title>
   <style>
-    :root { 
-      --primary:#7f2430; 
-      --accent:#1e6361; 
-      --gold:#c58a1b; 
-      --bg:#f4e2c7; 
-      --card:#fffaf2; 
-      --card-2:#f8efdf; 
-      --text:#241710; 
-      --muted:#735c4f; 
-      --border:#d4ad7f; 
-      --success:#2f7a4f; 
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+    :root {
+      --navy:       #445766;   /* app surface — from reference palette */
+      --navy-deep:  #2a363e;   /* page backdrop, darker shade of navy */
+      --navy-panel: #37474f;   /* inset panel / inactive breaker */
+      --navy-line:  #5c7482;   /* hairline on dark surfaces */
+      --teal:       #2a7e8f;   /* headline & label ink — from reference palette */
+      --teal-bright:#5cb8c7;   /* lit / active teal */
+      --gold:       #f8ab00;   /* money — from reference palette */
+      --gold-deep:  #b97a00;
+      --gold-glow:  rgba(248,171,0,.35);
+      --paper:      #f4f7f9;   /* card / meter-window surface */
+      --paper-2:    #e6edf0;
+      --ink:        #1b262b;  /* text on paper */
+      --muted:      #8098a1;
+      --line:       #ccd6da;
+      --danger:     #b3462f;
     }
     * { box-sizing:border-box; }
+
     body {
-      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f7ead5 0%, #efddbc 45%, #e5c58e 100%);
-      margin:0; padding:30px 20px; color:var(--text);
-    }
-    body::before {
-      content:""; position:fixed; inset:0; pointer-events:none; opacity:.22;
+      font-family:'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
       background:
-        linear-gradient(90deg, rgba(127,36,48,.20) 50%, transparent 50%) 0 0/18px 18px,
-        linear-gradient(0deg, rgba(30,99,97,.16) 50%, transparent 50%) 0 0/18px 18px,
-        linear-gradient(45deg, rgba(197,138,27,.18) 25%, transparent 25%, transparent 75%, rgba(197,138,27,.18) 75%) 0 0/36px 36px;
-      mix-blend-mode:multiply;
+        radial-gradient(1200px 600px at 50% -10%, #526877 0%, var(--navy-deep) 55%, #1f282e 100%);
+      margin:0; padding:24px 16px; color:var(--ink);
+      min-height:100vh;
     }
+    /* faint panel-rivet texture on the backdrop only */
+    body::before {
+      content:""; position:fixed; inset:0; pointer-events:none; opacity:.05;
+      background-image: radial-gradient(circle, #fff 1px, transparent 1.4px);
+      background-size:26px 26px;
+    }
+
     .dashboard-container {
       max-width:1400px; margin:0 auto;
-      background:linear-gradient(180deg, rgba(255,250,242,.96), rgba(248,239,219,.96));
-      border-radius:18px; box-shadow:0 12px 36px rgba(72,38,20,.18);
-      padding:30px; border:1px solid rgba(127,36,48,.12); position:relative; z-index:1;
+      background: linear-gradient(180deg, var(--navy) 0%, #3c4d57 100%);
+      border-radius:20px; box-shadow:0 24px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+      padding:28px; border:1px solid #263139; position:relative; z-index:1;
     }
+    /* meter-box latch strip */
     .dashboard-container::before {
-      content:""; display:block; height:12px; margin:-30px -30px 24px;
-      background:linear-gradient(90deg, #7f2430 0 14%, #e8ba45 14% 28%, #1e6361 28% 42%, #cf7f3a 42% 56%, #9f6a19 56% 70%, #62345d 70% 84%, #234f6c 84% 100%);
-      border-bottom:1px solid rgba(82,45,25,.28); border-radius:18px 18px 0 0;
+      content:""; display:block; height:10px; margin:-28px -28px 24px;
+      background: repeating-linear-gradient(90deg, var(--gold) 0 26px, var(--teal) 26px 52px);
+      border-radius:20px 20px 0 0;
+      box-shadow: inset 0 -2px 4px rgba(0,0,0,.25);
     }
-    .main-title { text-align:center; color:var(--primary); font-size:26px; margin-bottom:25px; font-weight:800; letter-spacing:.2px; }
-    .category-tabs { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:30px; }
+
+    .title-row { display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:20px; }
+    .main-title { text-align:center; color:var(--teal-bright); font-size:27px; font-weight:800; letter-spacing:.2px; }
+    .main-title .accent { color:var(--teal-bright); }
+
+    /* --- decorative signature: analog meter dial --- */
+    .meter-dial { width:46px; height:46px; flex:none; }
+    .meter-dial circle.face { fill:var(--navy-panel); stroke:var(--teal-bright); stroke-width:2; }
+    .meter-dial .tick { stroke:var(--paper-2); stroke-width:1.4; }
+    .meter-dial .needle { stroke:var(--gold); stroke-width:2.6; stroke-linecap:round; filter:drop-shadow(0 0 3px var(--gold-glow)); }
+    .meter-dial .hub { fill:var(--gold); }
+
+    .category-tabs { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:8px; margin-bottom:24px; background:var(--navy-deep); padding:10px; border-radius:14px; border:1px solid #202a30; box-shadow:inset 0 2px 6px rgba(0,0,0,.35); }
     .tab {
-      background:#f4eadc; border:1px solid rgba(127,36,48,.18); padding:14px 12px; font-size:15px; font-weight:700; color:#63453a;
-      border-radius:10px; cursor:pointer; transition:transform .15s ease, background .15s ease, color .15s ease, box-shadow .15s ease; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.03);
+      background:var(--navy-panel); border:1px solid #24303700; padding:14px 10px; font-size:14.5px; font-weight:700; color:#b9c7cc;
+      border-radius:9px; cursor:pointer; transition:transform .15s ease, background .15s ease, color .15s ease, box-shadow .15s ease; text-align:center;
+      box-shadow:0 1px 0 rgba(255,255,255,.04), inset 0 -2px 0 rgba(0,0,0,.25);
+      font-family:'Vazirmatn', sans-serif;
     }
-    .tab:hover { transform:translateY(-1px); }
-    .tab.active { background:linear-gradient(135deg, var(--primary), var(--accent)); color:white; border-color:transparent; box-shadow:0 6px 16px rgba(127,36,48,.22); }
-    
-    .grid-layout { display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:25px; }
+    .tab:hover { transform:translateY(-1px); color:#fff; }
+    .tab.active { background:linear-gradient(180deg, var(--teal-bright), var(--teal)); color:#08181c; border-color:transparent; box-shadow:0 0 0 2px var(--gold) inset, 0 6px 16px rgba(42,126,143,.35); }
+
+    .grid-layout { display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:20px; }
     @media (max-width:1100px) { .grid-layout { grid-template-columns:1fr; } }
-    
-    .section-card { background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(248,240,225,.94)); border:1px solid rgba(127,36,48,.14); border-radius:14px; padding:24px; box-shadow:0 2px 10px rgba(0,0,0,.03); }
-    .card-header { font-size:17px; font-weight:800; color:var(--primary); margin-top:0; margin-bottom:18px; padding-bottom:10px; border-bottom:2px solid rgba(127,36,48,.14); }
-    .field-box { display:flex; flex-direction:column; margin-bottom:16px; }
-    .field-box label { font-size:13.5px; font-weight:700; margin-bottom:6px; color:#5a4137; }
-    .field-box input, .field-box select { padding:12px 14px; border:1px solid rgba(127,36,48,.18); border-radius:8px; font-size:15px; outline:none; background:white; color:var(--text); transition:border-color .2s ease, box-shadow .2s ease; }
-    .field-box input:focus, .field-box select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(127,36,48,.10); }
-    
-    .checkbox-container { display:flex; align-items:center; gap:10px; margin-top:5px; margin-bottom:16px; cursor:pointer; font-weight:700; font-size:14.5px; color:var(--primary); background: rgba(127,36,48,.05); padding: 12px; border-radius: 8px; border: 1px dashed rgba(127,36,48,.20); }
-    .checkbox-container input { width:22px; height:22px; cursor:pointer; accent-color:var(--primary); }
-    .output-highlight { background:#f4f1ea; font-weight:800; color:var(--primary); }
-    
-    .summary-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; margin-top:18px; }
-    .summary-box { border:1px solid rgba(127,36,48,.14); border-radius:12px; background:linear-gradient(180deg, #fffaf3, #f6ecd9); padding:12px 14px; }
-    .summary-box .label { font-size:12px; color:var(--muted); font-weight:700; margin-bottom:6px; }
-    .summary-box .value { font-size:18px; font-weight:800; color:var(--primary); }
-    
+
+    .section-card { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:0 10px 24px rgba(0,0,0,.18); }
+    .card-header { font-size:16.5px; font-weight:800; color:var(--teal); margin-top:0; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid var(--teal); display:flex; align-items:center; gap:8px; }
+    .field-box { display:flex; flex-direction:column; margin-bottom:13px; }
+    .field-box label { font-size:13px; font-weight:700; margin-bottom:6px; color:var(--teal); }
+    .field-box input, .field-box select { padding:11px 13px; border:1px solid var(--line); border-radius:8px; font-size:15px; outline:none; background:#fff; color:var(--ink); transition:border-color .2s ease, box-shadow .2s ease; font-family:'Vazirmatn', sans-serif; }
+    .field-box input:focus, .field-box select:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(42,126,143,.15); }
+
+    .checkbox-container { display:flex; align-items:center; gap:10px; margin-top:5px; margin-bottom:16px; cursor:pointer; font-weight:700; font-size:14px; color:var(--teal); background: #eaf2f3; padding: 12px; border-radius: 8px; border: 1px dashed var(--teal); }
+    .checkbox-container input { width:22px; height:22px; cursor:pointer; accent-color:var(--gold); }
+    .output-highlight { background:transparent; font-weight:800; color:var(--gold); font-family:'JetBrains Mono', monospace; }
+
+    .summary-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; margin-top:14px; }
+    .summary-box { border:1px solid var(--navy-line); border-radius:12px; background:linear-gradient(180deg, var(--navy-panel), #2c383e); padding:12px 14px; box-shadow:inset 0 2px 6px rgba(0,0,0,.35); }
+    .summary-box .label { font-size:11.5px; color:var(--teal-bright); font-weight:700; margin-bottom:6px; letter-spacing:.3px; }
+    .summary-box .value { font-size:18px; font-weight:800; color:var(--gold); }
+    .summary-box .value input.output-highlight { text-shadow:0 0 10px var(--gold-glow); }
+
     table { width:100%; border-collapse:collapse; margin-top:10px; }
-    th, td { padding:12px; text-align:right; font-size:13.5px; border-bottom:1px solid rgba(127,36,48,.12); }
-    th { background:rgba(127,36,48,.05); color:#5d4338; font-weight:800; }
-    .table-group-header { font-weight:800; color:var(--accent); background:rgba(30,99,97,.09); }
-    .table-group-header td { color:var(--accent); }
-    
-    .grand-total-panel { background:linear-gradient(135deg, var(--success), #3e9360); color:white; border-radius:12px; padding:18px; text-align:center; font-size:22px; font-weight:800; margin-top:22px; box-shadow:0 6px 16px rgba(47,122,79,.18); }
+    th, td { padding:11px; text-align:right; font-size:13px; border-bottom:1px solid var(--line); }
+    th { background:rgba(42,126,143,.10); color:var(--teal); font-weight:800; }
+    td:last-child { font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--gold-deep); }
+    .table-group-header { font-weight:800; color:var(--teal) !important; background:rgba(42,126,143,.16); }
+    .table-group-header td { color:var(--teal) !important; font-family:'Vazirmatn', sans-serif; }
+
+    .grand-total-panel { background:linear-gradient(135deg, var(--navy-deep), #1f282e); border:1px solid var(--gold-deep); border-radius:12px; padding:18px; text-align:center; font-size:22px; font-weight:800; margin-top:14px; box-shadow:0 6px 18px rgba(0,0,0,.3), inset 0 0 0 1px rgba(255,255,255,.04); }
+    .grand-total-panel .gt-label, .grand-total-panel .gt-suffix { font-family:'Vazirmatn', sans-serif; color:#fff; font-size:16px; }
+    .grand-total-panel #grandSummaryDisplay { font-family:'JetBrains Mono', monospace; color:var(--gold); text-shadow:0 0 12px var(--gold-glow); font-size:24px; }
     .section-note { font-size:12px; color:var(--muted); margin-top:10px; line-height:1.6; }
-    
+
     @media (max-width:700px) {
-      body { padding:12px 10px; }
-      .dashboard-container { padding:16px; }
-      .dashboard-container::before { margin:-16px -16px 18px; }
-      .main-title { font-size:22px; }
-      .summary-grid { grid-template-columns:1fr; }
-      th, td { padding:10px; font-size:12.5px; }
-      .category-tabs { grid-template-columns: repeat(2, 1fr); }
+      body { padding:10px 8px; }
+      .dashboard-container { padding:14px; }
+      .dashboard-container::before { margin:-14px -14px 16px; }
+      .title-row { gap:8px; margin-bottom:16px; }
+      .meter-dial { width:36px; height:36px; }
+      .main-title { font-size:18px; }
+      .category-tabs { grid-template-columns: repeat(2, 1fr); gap:8px; padding:8px; }
+      .tab { padding:11px 8px; font-size:12px; }
+      .grid-layout { grid-template-columns: 1fr; gap:14px; }
+      .section-card { padding:14px; }
+      .card-header { font-size:14px; margin-bottom:12px; }
+      .field-box { margin-bottom:10px; }
+      .field-box label { font-size:12px; margin-bottom:4px; }
+      .field-box input, .field-box select { padding:10px 10px; font-size:14px; border-radius:6px; }
+      .checkbox-container { padding:10px; margin-bottom:12px; font-size:13px; }
+      .checkbox-container input { width:20px; height:20px; }
+      .summary-grid { grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:12px; }
+      .summary-box { padding:10px 12px; border-radius:10px; }
+      .summary-box .label { font-size:10px; margin-bottom:4px; }
+      .summary-box .value { font-size:15px; }
+      .summary-box .value input { font-size:15px; }
+      table { margin-top:8px; }
+      th, td { padding:7px; font-size:11px; }
+      .grand-total-panel { padding:14px; font-size:18px; margin-top:14px; }
+      .grand-total-panel .gt-label, .grand-total-panel .gt-suffix { font-size:14px; }
+      .grand-total-panel #grandSummaryDisplay { font-size:20px; }
+      .action-row { gap:10px; margin:14px 0 0; }
+      .action-row .calc-btn, .action-row .print-btn { min-width:100px; padding:12px 14px; font-size:14px; }
+      .split-note { font-size:11px; padding:8px 10px; margin-top:12px; }
+      .section-note { font-size:11px; margin-top:8px; }
     }
-  
-    .action-row { display: flex; gap: 12px; margin: 18px 0 0; flex-wrap: wrap; }
+
+    .action-row { display: flex; gap: 12px; margin: 14px 0 0; flex-wrap: wrap; }
     .action-row .calc-btn, .action-row .print-btn {
-      flex: 1; min-width: 120px; border: 0; border-radius: 10px; padding: 14px 18px; font-size: 15px; font-weight: 800; cursor: pointer; color: white; box-shadow: 0 6px 16px rgba(0,0,0,.12); transition: transform .15s ease, box-shadow .15s ease;
+      flex: 1; min-width: 120px; border: 0; border-radius: 10px; padding: 14px 18px; font-size: 15px; font-weight: 800; cursor: pointer; color: white; box-shadow: 0 6px 16px rgba(0,0,0,.25); transition: transform .15s ease, box-shadow .15s ease; font-family:'Vazirmatn', sans-serif;
     }
-    .action-row .calc-btn { background: linear-gradient(135deg, var(--primary), #a03744); }
-    .action-row .print-btn { background: linear-gradient(135deg, var(--accent), #2f8a87); }
-    
-    .split-note { font-size: 13px; color: var(--primary); font-weight: 700; background: rgba(127,36,48,.06); border: 1px dashed rgba(127,36,48,.18); border-radius: 10px; padding: 10px 12px; margin-top: 16px; }
-    .print-receipt { display: none; background: white; color: #1f1a17; }
-    .receipt-sheet { border: 1px solid rgba(127,36,48,.16); border-radius: 14px; background: linear-gradient(180deg, #fffdf9, #f9f1e5); padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.06); break-inside: avoid; page-break-inside: avoid; }
-    .receipt-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; border-bottom: 2px solid rgba(127,36,48,.12); padding-bottom: 10px; margin-bottom: 12px; }
-    .receipt-title { font-size: 18px; font-weight: 900; color: var(--primary); line-height: 1.35; }
+    .action-row .calc-btn:hover, .action-row .print-btn:hover { transform:translateY(-2px); }
+    .action-row .calc-btn { background: linear-gradient(135deg, var(--teal), #1d5b67); }
+    .action-row .print-btn { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color:#241900; }
+
+    .split-note { font-size: 12.5px; color: var(--teal); font-weight: 700; background: #eaf2f3; border: 1px dashed var(--teal); border-radius: 10px; padding: 10px 12px; margin-top: 16px; }
+
+    /* ================= PRINT RECEIPT ================= */
+    .print-receipt { display: none; background: transparent; color: var(--ink); }
+    .receipt-sheet { position:relative; border: 1px solid var(--line); border-radius: 4px; background: #ffffff; padding: 20px 18px 16px; box-shadow: 0 8px 24px rgba(0,0,0,.08); break-inside: avoid; page-break-inside: avoid; }
+    /* perforated tear edge, top & bottom */
+    .receipt-sheet::before, .receipt-sheet::after {
+      content:""; position:absolute; left:0; right:0; height:12px;
+      background-image: radial-gradient(circle at 50% 50%, transparent 5px, #fff 5.5px);
+      background-size: 16px 12px; background-repeat:repeat-x;
+    }
+    .receipt-sheet::before { top:-6px; }
+    .receipt-sheet::after { bottom:-6px; transform:scaleY(-1); }
+    .receipt-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; border-bottom: 2px dashed var(--teal); padding-bottom: 10px; margin-bottom: 12px; }
+    .receipt-title { font-size: 19px; font-weight: 900; color: var(--teal); line-height: 1.35; }
     .receipt-subtitle { font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 4px; }
-    .receipt-badge { padding: 7px 11px; border-radius: 999px; background: rgba(30,99,97,.10); color: var(--accent); font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .receipt-badge { padding: 7px 12px; border-radius: 999px; background: rgba(42,126,143,.10); border:1px solid var(--teal); color: var(--teal); font-size: 12px; font-weight: 800; white-space: nowrap; }
     .receipt-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
-    .receipt-box { border: 1px solid rgba(127,36,48,.12); border-radius: 10px; padding: 8px 10px; background: white; break-inside: avoid; }
-    .receipt-box .label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 700; }
-    .receipt-box .value { font-size: 13px; font-weight: 800; color: var(--text); line-height: 1.35; word-break: break-word; }
+    .receipt-box { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: #fff; break-inside: avoid; }
+    .receipt-box .label { display: block; font-size: 11px; color: var(--teal); margin-bottom: 4px; font-weight: 700; }
+    .receipt-box .value { font-size: 13px; font-weight: 800; color: var(--ink); line-height: 1.35; word-break: break-word; font-family:'JetBrains Mono', monospace; }
     .receipt-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
-    .receipt-summary .receipt-box .value { font-size: 14px; color: var(--primary); }
+    .receipt-summary .receipt-box { background:#fbfaf5; }
+    .receipt-summary .receipt-box .value { font-size: 14px; color: var(--gold-deep); }
     .receipt-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 6px; }
-    .receipt-table th, .receipt-table td { border-bottom: 1px solid rgba(127,36,48,.10); padding: 6px 7px; text-align: right; }
-    .receipt-table th { background: rgba(127,36,48,.05); font-size: 11px; font-weight: 800; color: #5d4338; }
-    .receipt-total { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: linear-gradient(135deg, var(--success), #3d8e5e); color: white; font-weight: 900; text-align: center; font-size: 16px; }
-    .receipt-footnote { margin-top: 8px; font-size: 10px; color: var(--muted); text-align: center; }
-    
+    .receipt-table th, .receipt-table td { border-bottom: 1px dotted var(--line); padding: 6px 7px; text-align: right; }
+    .receipt-table th { background: rgba(42,126,143,.08); font-size: 11px; font-weight: 800; color: var(--teal); }
+    .receipt-table td:last-child { font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--gold-deep); }
+    .receipt-total { margin-top: 10px; padding: 10px 12px; border-radius: 8px; border:2px solid var(--gold); background: transparent; font-weight: 900; text-align: center; font-size: 17px; }
+    .receipt-total .rt-label, .receipt-total .rt-suffix { font-family:'Vazirmatn', sans-serif; font-size:14px; color:var(--ink); }
+    .receipt-total #receiptGrandTotal { font-family:'JetBrains Mono', monospace; color:var(--gold-deep); font-size:18px; }
+    .receipt-footnote, .page-credit { margin-top: 10px; font-size: 10px; color: var(--muted); text-align: center; }
+
     @page { size: A4 landscape; margin: 8mm; }
     @media print {
-      body { background: white !important; padding: 0 !important; }
+      body { background: #ffffff !important; padding: 0 !important; }
       body::before { display: none !important; }
       .dashboard-container, .no-print { display: none !important; }
-      .print-receipt { display: block !important; }
-      .print-receipt .receipt-sheet { box-shadow: none !important; border-color: #d7c1a0; }
+      .print-receipt { display: block !important; background:transparent !important; }
+      .print-receipt .receipt-sheet { box-shadow: none !important; border-color: var(--line); background:#fff !important; }
       .receipt-table th, .receipt-table td { padding: 4px 6px; font-size: 10px; }
       .receipt-title { font-size: 16px; }
-      .receipt-sheet { padding: 10px; }
+      .receipt-sheet { padding: 12px; }
       .receipt-grid, .receipt-summary { gap: 6px; }
       .receipt-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .receipt-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -134,7 +200,22 @@
 </head>
 <body>
 <div class="dashboard-container">
-  <div class="main-title">بژمێری  کارەبا</div>
+  <div class="title-row">
+    <svg class="meter-dial" viewBox="0 0 46 46" aria-hidden="true">
+      <circle class="face" cx="23" cy="23" r="20"></circle>
+      <line class="tick" x1="23" y1="5" x2="23" y2="9"></line>
+      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(45 23 23)"></line>
+      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(90 23 23)"></line>
+      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(135 23 23)"></line>
+      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(180 23 23)"></line>
+      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(225 23 23)"></line>
+      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(270 23 23)"></line>
+      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(315 23 23)"></line>
+      <line class="needle" x1="23" y1="23" x2="23" y2="10" transform="rotate(120 23 23)"></line>
+      <circle class="hub" cx="23" cy="23" r="3"></circle>
+    </svg>
+    <div class="main-title">بژمێری <span class="accent">کارەبا</span></div>
+  </div>
   <div class="category-tabs">
     <button class="tab active" type="button" data-section="home" onclick="changeSection('home', event)">ماڵان (Home)</button>
     <button class="tab" type="button" data-section="commercial" onclick="changeSection('commercial', event)">بازرگانی (Commercial)</button>
@@ -151,7 +232,7 @@
       <div class="field-box"><label>ژمارەی پێوەر:</label><input type="text" id="meterNumber" value=""></div>
       <div class="field-box"><label>ژمارەی بلۆک / زنجیرە:</label><input type="text" id="serialNumber" value=""></div>
       <div class="field-box"><label>پۆلی هاوبەش:</label><input type="text" id="customerCategory" placeholder="بنووسە..." value=""></div>
-      <div class="field-box"><label>هاوکۆلکە (Factor):</label><input type="number" id="multiplier" value="1" min="0" step="0.01" oninput="executeCalculationEngine()"></div>
+      <div class="field-box"><label>هاوکۆلکە (Factor):</label><input type="number" id="multiplier" value="1" min="0" step="0.01"></div>
       
       <label class="checkbox-container" id="transformerToggleRow">
         <input type="checkbox" id="hasTransformer" onchange="executeCalculationEngine()">
@@ -160,11 +241,11 @@
     </div>
     <div class="section-card">
       <div class="card-header">⚡ خوێندنەوە و ڕێکەوتەکان</div>
-      <div class="field-box"><label>خوێندنەوەی پێشوو:</label><input type="number" id="prevRead" value="" min="0" step="1" oninput="executeCalculationEngine()"></div>
-      <div class="field-box"><label>ڕێکەوتی خوێندنەوەی پێشوو:</label><input type="date" id="prevDate" value="2026-05-01" onchange="executeCalculationEngine()"></div>
-      <div class="field-box"><label>خوێندنەوەی نوێ:</label><input type="number" id="currRead" value="" min="0" step="1" oninput="executeCalculationEngine()"></div>
-      <div class="field-box"><label>ڕێکەوتی خوێندنەوەی نوێ:</label><input type="date" id="currDate" value="2026-06-01" onchange="executeCalculationEngine()"></div>
-      <div class="field-box"><label>ڕێکەوتی چالاککردنی ڕووناکی:</label><input type="date" id="lightDate" value="2026-06-01" onchange="executeCalculationEngine()"></div>
+      <div class="field-box"><label>خوێندنەوەی پێشوو:</label><input type="number" id="prevRead" value="" min="0" step="1"></div>
+      <div class="field-box"><label>ڕێکەوتی خوێندنەوەی پێشوو:</label><input type="date" id="prevDate" value="2026-05-01"></div>
+      <div class="field-box"><label>خوێندنەوەی نوێ:</label><input type="number" id="currRead" value="" min="0" step="1"></div>
+      <div class="field-box"><label>ڕێکەوتی خوێندنەوەی نوێ:</label><input type="date" id="currDate" value="2026-06-01"></div>
+      <div class="field-box"><label>ڕێکەوتی چالاککردنی ڕووناکی:</label><input type="date" id="lightDate" value="2026-06-01"></div>
       <div class="summary-grid">
         <div class="summary-box"><div class="label">ڕۆژەکان</div><div class="value"><input type="text" id="daysCount" value="31" readonly class="output-highlight" style="width:100%; border:0; padding:0; background:transparent; font:inherit; color:inherit; text-align:center;"></div></div>
         <div class="summary-box"><div class="label">ڕۆژەکانی ڕووناکی</div><div class="value"><input type="text" id="lightDaysCount" value="31" readonly class="output-highlight" style="width:100%; border:0; padding:0; background:transparent; font:inherit; color:inherit; text-align:center;"></div></div>
@@ -177,7 +258,7 @@
     <div class="section-card">
       <div class="card-header">📊 جیاکردنەوەی نرخ و قۆناغەکانی کارەبا</div>
       <table><thead><tr><th>قۆناغ / نرخ</th><th>کیلۆوات</th><th>بڕی پارە</th></tr></thead><tbody id="matrixTableBody"></tbody></table>
-      <div class="grand-total-panel">کۆی گشتی: <span id="grandSummaryDisplay">0</span> دینار</div>
+      <div class="grand-total-panel"><span class="gt-label">کۆی گشتی:</span> <span id="grandSummaryDisplay">0</span> <span class="gt-suffix">دینار</span></div>
     </div>
   </div>
 </div>
@@ -400,7 +481,7 @@ function printReceipt() {
       </thead>
       <tbody id="receiptTableBody"></tbody>
     </table>
-    <div class="receipt-total">کۆی گشتی: <span id="receiptGrandTotal">0</span> دینار</div>
+    <div class="receipt-total"><span class="rt-label">کۆی گشتی:</span> <span id="receiptGrandTotal">0</span> <span class="rt-suffix">دینار</span></div>
   </div>
   <div class="page-credit page-credit-bottom">ئامادەکراوە لەلایەن تیمی فرۆشتنیی ووزەی دوکان</div>
 </div>
