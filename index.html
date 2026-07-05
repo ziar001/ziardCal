@@ -54,16 +54,9 @@
       box-shadow: inset 0 -2px 4px rgba(0,0,0,.25);
     }
 
-    .title-row { display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:20px; }
+
     .main-title { text-align:center; color:var(--teal-bright); font-size:27px; font-weight:800; letter-spacing:.2px; }
     .main-title .accent { color:var(--teal-bright); }
-
-    /* --- decorative signature: analog meter dial --- */
-    .meter-dial { width:46px; height:46px; flex:none; }
-    .meter-dial circle.face { fill:var(--navy-panel); stroke:var(--teal-bright); stroke-width:2; }
-    .meter-dial .tick { stroke:var(--paper-2); stroke-width:1.4; }
-    .meter-dial .needle { stroke:var(--gold); stroke-width:2.6; stroke-linecap:round; filter:drop-shadow(0 0 3px var(--gold-glow)); }
-    .meter-dial .hub { fill:var(--gold); }
 
     .category-tabs { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:8px; margin-bottom:24px; background:var(--navy-deep); padding:10px; border-radius:14px; border:1px solid #202a30; box-shadow:inset 0 2px 6px rgba(0,0,0,.35); }
     .tab {
@@ -111,8 +104,6 @@
       body { padding:10px 8px; }
       .dashboard-container { padding:14px; }
       .dashboard-container::before { margin:-14px -14px 16px; }
-      .title-row { gap:8px; margin-bottom:16px; }
-      .meter-dial { width:36px; height:36px; }
       .main-title { font-size:18px; }
       .category-tabs { grid-template-columns: repeat(2, 1fr); gap:8px; padding:8px; }
       .tab { padding:11px 8px; font-size:12px; }
@@ -200,22 +191,7 @@
 </head>
 <body>
 <div class="dashboard-container">
-  <div class="title-row">
-    <svg class="meter-dial" viewBox="0 0 46 46" aria-hidden="true">
-      <circle class="face" cx="23" cy="23" r="20"></circle>
-      <line class="tick" x1="23" y1="5" x2="23" y2="9"></line>
-      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(45 23 23)"></line>
-      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(90 23 23)"></line>
-      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(135 23 23)"></line>
-      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(180 23 23)"></line>
-      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(225 23 23)"></line>
-      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(270 23 23)"></line>
-      <line class="tick" x1="23" y1="5" x2="23" y2="9" transform="rotate(315 23 23)"></line>
-      <line class="needle" x1="23" y1="23" x2="23" y2="10" transform="rotate(120 23 23)"></line>
-      <circle class="hub" cx="23" cy="23" r="3"></circle>
-    </svg>
-    <div class="main-title">بژمێری <span class="accent">کارەبا</span></div>
-  </div>
+  <div class="main-title">بژمێری <span class="accent">کارەبا</span></div>
   <div class="category-tabs">
     <button class="tab active" type="button" data-section="home" onclick="changeSection('home', event)">ماڵان (Home)</button>
     <button class="tab" type="button" data-section="commercial" onclick="changeSection('commercial', event)">بازرگانی (Commercial)</button>
