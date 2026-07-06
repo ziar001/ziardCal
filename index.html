@@ -283,6 +283,29 @@
       .receipt-total .rt-label, .receipt-total .rt-suffix { font-size: 11px; }
       .receipt-total #receiptGrandTotal { font-size: 14px; }
       .receipt-footnote, .page-credit { font-size: 8px; margin-top: 6px; }
+
+      /* extra compaction kicks in automatically when the bill has many rows
+         (e.g. a light-rate date splits usage into two tariff sections) */
+      .receipt-sheet.dense { padding: 7px 12px 6px; }
+      .receipt-sheet.dense .receipt-header { padding-bottom: 4px; margin-bottom: 6px; }
+      .receipt-sheet.dense .receipt-title { font-size: 13px; }
+      .receipt-sheet.dense .receipt-subtitle { font-size: 9px; margin-top: 1px; }
+      .receipt-sheet.dense .receipt-badge { font-size: 9px; padding: 3px 7px; }
+      .receipt-sheet.dense .receipt-grid,
+      .receipt-sheet.dense .receipt-summary { gap: 4px; margin-bottom: 5px; }
+      .receipt-sheet.dense .receipt-box { padding: 3px 6px; }
+      .receipt-sheet.dense .receipt-box .label { font-size: 8px; margin-bottom: 1px; }
+      .receipt-sheet.dense .receipt-box .value { font-size: 9.5px; }
+      .receipt-sheet.dense .receipt-summary .receipt-box .value { font-size: 10.5px; }
+      .receipt-sheet.dense .receipt-table { font-size: 8px; margin-top: 2px; }
+      .receipt-sheet.dense .receipt-table th,
+      .receipt-sheet.dense .receipt-table td { padding: 1.5px 4px; }
+      .receipt-sheet.dense .receipt-total { margin-top: 5px; padding: 4px 8px; font-size: 11px; }
+      .receipt-sheet.dense .receipt-total .rt-label,
+      .receipt-sheet.dense .receipt-total .rt-suffix { font-size: 9.5px; }
+      .receipt-sheet.dense .receipt-total #receiptGrandTotal { font-size: 12px; }
+      .receipt-sheet.dense .receipt-footnote,
+      .receipt-sheet.dense .page-credit { font-size: 7px; margin-top: 3px; }
     }
   </style>
 </head>
@@ -347,7 +370,7 @@
 </div>
 
 <div class="print-receipt" id="printReceipt">
-  <div class="receipt-sheet">
+  <div class="receipt-sheet" id="receiptSheet">
     <div class="receipt-header">
       <div>
         <div class="receipt-title">بژمێری کارەبا</div>
@@ -570,6 +593,10 @@ function executeCalculationEngine() {
   el['receiptTransformerFee'].textContent = transformerMultiplier > 1 ? '× 1.025' : '× 1.000';
   el['receiptTableBody'].innerHTML = tableHtml;
   el['receiptGrandTotal'].textContent = fmtMoney(totalCost);
+
+  var rowCount = (tableHtml.match(/<tr/g) || []).length;
+  var receiptSheet = document.getElementById('receiptSheet');
+  if (receiptSheet) receiptSheet.classList.toggle('dense', rowCount > 8);
 }
 
 function printReceipt() {
