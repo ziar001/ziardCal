@@ -161,6 +161,11 @@
 
     .checkbox-container { display:flex; align-items:center; gap:10px; margin-top:5px; margin-bottom:16px; cursor:pointer; font-weight:700; font-size:14px; color:var(--teal); background: #eaf2f3; padding: 12px; border-radius: 8px; border: 1px dashed var(--teal); }
     .checkbox-container input { width:22px; height:22px; cursor:pointer; accent-color:var(--gold); }
+    .solar-box { background:#fff8e6; border:1px dashed var(--gold-deep); border-radius:10px; padding:12px 14px; margin-bottom:16px; }
+    .solar-box-header { font-weight:800; color:var(--gold-deep); font-size:13.5px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+    .solar-box .field-box { margin-bottom:6px; }
+    .solar-box .field-box label { color:var(--gold-deep); }
+    .solar-box .solar-note { font-size:11px; color:#8a6a1f; line-height:1.5; margin-top:2px; }
     .output-highlight { background:transparent; font-weight:800; color:var(--gold); font-family:'JetBrains Mono', monospace; }
 
     .summary-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; margin-top:14px; }
@@ -174,6 +179,10 @@
     th { background:rgba(42,126,143,.10); color:var(--teal); font-weight:800; }
     td:last-child { font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--gold-deep); }
     .table-group-header { font-weight:800; color:var(--teal) !important; background:rgba(42,126,143,.16); }
+    tr.full-row td { font-weight:800; color:var(--ink) !important; border-top:1px solid var(--line); }
+    tr.full-row td:last-child { color:var(--ink) !important; }
+    tr.net-row td { font-weight:800; color:var(--teal) !important; background:rgba(42,126,143,.06); border-top:1px dashed var(--teal); }
+    tr.net-row td:last-child { color:var(--teal) !important; }
     .table-group-header td { color:var(--teal) !important; font-family:'Vazirmatn', sans-serif; }
 
     .grand-total-panel { background:linear-gradient(135deg, var(--navy-deep), #1f282e); border:1px solid var(--gold-deep); border-radius:12px; padding:18px; text-align:center; font-size:22px; font-weight:800; margin-top:14px; box-shadow:0 6px 18px rgba(0,0,0,.3); }
@@ -350,6 +359,11 @@
           <div class="field-box"><label>خوێندنەوەی نوێ:</label><input type="number" id="currRead" value="" min="0" step="1"></div>
           <div class="field-box"><label>ڕێکەوتی خوێندنەوەی نوێ:</label><input type="date" id="currDate" value="2026-06-01"></div>
           <div class="field-box"><label>ڕێکەوتی چالاککردنی ڕووناکی:</label><input type="date" id="lightDate" value="2026-06-01"></div>
+          <div class="solar-box" id="solarBox">
+            <div class="solar-box-header">☀️ کارەبای پانێلی خۆر (سۆلار)</div>
+            <div class="field-box"><label>یەکەی هەناردەکراو بۆ تۆڕ (کیلۆوات):</label><input type="number" id="solarUnits" value="0" min="0" step="1"></div>
+            <div class="solar-note">ئەم یەکەیە پێش هەژماردنی نرخ لە کۆی یەکەی بەکارهاتوو کەم دەکرێتەوە.</div>
+          </div>
           <div class="summary-grid">
             <div class="summary-box"><div class="label">ڕۆژەکان</div><div class="value"><input type="text" id="daysCount" value="31" readonly class="output-highlight" style="width:100%; border:0; padding:0; background:transparent; font:inherit; color:inherit; text-align:center;"></div></div>
             <div class="summary-box"><div class="label">ڕۆژەکانی ڕووناکی</div><div class="value"><input type="text" id="lightDaysCount" value="31" readonly class="output-highlight" style="width:100%; border:0; padding:0; background:transparent; font:inherit; color:inherit; text-align:center;"></div></div>
@@ -399,6 +413,8 @@
       <div class="receipt-box"><span class="label">خوێندنەوەی نوێ</span><span class="value" id="receiptCurrRead"></span></div>
       <div class="receipt-box"><span class="label">هاوکۆلکە</span><span class="value" id="receiptMultiplier"></span></div>
       <div class="receipt-box"><span class="label">کرێی گۆڕەر</span><span class="value" id="receiptTransformerFee"></span></div>
+      <div class="receipt-box"><span class="label">کۆی یەکە (پێش سۆلار)</span><span class="value" id="receiptGrossUnits"></span></div>
+      <div class="receipt-box"><span class="label">یەکەی سۆلاری هەناردەکراو</span><span class="value" id="receiptSolarUnits"></span></div>
     </div>
     <table class="receipt-table">
       <thead>
@@ -447,7 +463,7 @@ function buildTariffMenu() {
 }
 
 function cacheElements() {
-  const ids = ['customerName', 'accountnumber', 'meterNumber', 'serialNumber', 'customerCategory', 'multiplier', 'hasTransformer', 'transformerToggleRow', 'prevRead', 'prevDate', 'currRead', 'currDate', 'lightDate', 'daysCount', 'lightDaysCount', 'finalCalculatedUnits', 'finalTotalBox', 'matrixTableBody', 'grandSummaryDisplay', 'splitNote', 'receiptSectionBadge', 'receiptCustomerName', 'receiptAccountNumber', 'receiptCustomerCategory', 'receiptMeterNumber', 'receiptSerialNumber', 'receiptPrevDate', 'receiptCurrDate', 'receiptLightDate', 'receiptTotalDays', 'receiptMainDays', 'receiptLightDays', 'receiptTotalUnits', 'receiptPrevRead', 'receiptCurrRead', 'receiptMultiplier', 'receiptTransformerFee', 'receiptTableBody', 'receiptGrandTotal'];
+  const ids = ['customerName', 'accountnumber', 'meterNumber', 'serialNumber', 'customerCategory', 'multiplier', 'hasTransformer', 'transformerToggleRow', 'solarUnits', 'prevRead', 'prevDate', 'currRead', 'currDate', 'lightDate', 'daysCount', 'lightDaysCount', 'finalCalculatedUnits', 'finalTotalBox', 'matrixTableBody', 'grandSummaryDisplay', 'splitNote', 'receiptSectionBadge', 'receiptCustomerName', 'receiptAccountNumber', 'receiptCustomerCategory', 'receiptMeterNumber', 'receiptSerialNumber', 'receiptPrevDate', 'receiptCurrDate', 'receiptLightDate', 'receiptTotalDays', 'receiptMainDays', 'receiptLightDays', 'receiptTotalUnits', 'receiptPrevRead', 'receiptCurrRead', 'receiptMultiplier', 'receiptTransformerFee', 'receiptGrossUnits', 'receiptSolarUnits', 'receiptTableBody', 'receiptGrandTotal'];
   ids.forEach(id => el[id] = document.getElementById(id));
 }
 
@@ -544,8 +560,10 @@ function executeCalculationEngine() {
   var prevRead = num('prevRead');
   var currRead = num('currRead');
   var factor = num('multiplier') || 1;
+  var solarUnits = num('solarUnits');
 
-  var totalUnits = Math.max(0, (currRead - prevRead) * factor);
+  var grossUnits = Math.max(0, (currRead - prevRead) * factor);
+  var totalUnits = Math.max(0, grossUnits - solarUnits);
   var split = getSplitState();
   var data = structuralMatrix[currentActiveSection];
   var mainUnits = split.totalDays ? totalUnits * split.beforeDays / split.totalDays : totalUnits;
@@ -554,11 +572,58 @@ function executeCalculationEngine() {
   var transformerMultiplier = (el['hasTransformer'] && el['hasTransformer'].checked) ? transformerFactor : 1;
 
   var mainPack = buildPortionRows('پێش ڕووناکی', data.normal, mainUnits, split.beforeDays, data.mode);
-  var lightPack = buildPortionRows('دوای ڕووناکی', data.light, lightUnits, split.afterDays, data.mode);
-  var baseTotal = mainPack.subtotal + lightPack.subtotal;
+
+  // split the "دوای ڕووناکی" days into 30-day buckets anchored to the light-activation date,
+  // price each bucket separately, and discount each one on its own (50% / 25% / 15% / none)
+  var lightBucketsHtml = '';
+  var lightNetSubtotal = 0;
+
+  if (split.afterDays > 0 && lightUnits > 0) {
+    var prevDateObj = parseDateValue(el['prevDate'].value);
+    var currDateObj = parseDateValue(el['currDate'].value);
+    var lightDateObj = parseDateValue(el['lightDate'].value);
+
+    if (lightDateObj && currDateObj) {
+      var afterStartDate = (prevDateObj && prevDateObj > lightDateObj) ? prevDateObj : lightDateObj;
+      var afterStartOffset = diffDays(lightDateObj, afterStartDate);
+      var afterEndOffset = afterStartOffset + split.afterDays;
+
+      var boundaries = [0, 30, 60, 90, Infinity];
+      var discountRates = [0.50, 0.25, 0.15, 0];
+      var monthLabels = ['یەکەم', 'دووەم', 'سێیەم', null];
+
+      for (var bi = 0; bi < 4; bi++) {
+        var ovStart = Math.max(afterStartOffset, boundaries[bi]);
+        var ovEnd = Math.min(afterEndOffset, boundaries[bi + 1]);
+        var bucketDays = Math.max(0, ovEnd - ovStart);
+        if (bucketDays <= 0) continue;
+
+        var bucketUnits = lightUnits * (bucketDays / split.afterDays);
+        var bucketTitle = monthLabels[bi] ? ('دوای ڕووناکی (مانگی ' + monthLabels[bi] + ')') : 'دوای ڕووناکی';
+        var bucketPack = buildPortionRows(bucketTitle, data.light, bucketUnits, bucketDays, data.mode);
+        lightBucketsHtml += bucketPack.html;
+
+        var rate = discountRates[bi];
+        var discAmt = bucketPack.subtotal * rate;
+        var bucketNet = bucketPack.subtotal - discAmt;
+        lightNetSubtotal += bucketNet;
+        if (rate > 0 && bucketPack.subtotal > 0) {
+          lightBucketsHtml += '<tr class="full-row"><td>کۆی پارە پێش داشکاندن (مانگی ' + monthLabels[bi] + ')</td><td>—</td><td>' + fmtMoney(bucketPack.subtotal) + '</td></tr>';
+          lightBucketsHtml += '<tr><td>داشکاندنی مانگی ' + monthLabels[bi] + ' (' + Math.round(rate * 100) + '%-)</td><td>—</td><td>-' + fmtMoney(discAmt) + '</td></tr>';
+          lightBucketsHtml += '<tr class="net-row"><td>پارەی ماوە دوای داشکاندن (مانگی ' + monthLabels[bi] + ')</td><td>—</td><td>' + fmtMoney(bucketNet) + '</td></tr>';
+        }
+      }
+    } else {
+      var fallbackPack = buildPortionRows('دوای ڕووناکی', data.light, lightUnits, split.afterDays, data.mode);
+      lightBucketsHtml = fallbackPack.html;
+      lightNetSubtotal = fallbackPack.subtotal;
+    }
+  }
+
+  var baseTotal = mainPack.subtotal + lightNetSubtotal;
   var totalCost = baseTotal * transformerMultiplier;
-  var tableHtml = (mainPack.html || '') + (lightPack.html || '');
-  
+  var tableHtml = (mainPack.html || '') + lightBucketsHtml;
+
   if (transformerMultiplier > 1) {
     tableHtml += '<tr><td>کرێی گۆڕەر × 1.025</td><td>' + fmtUnits(baseTotal) + '</td><td>' + fmtMoney(totalCost - baseTotal) + '</td></tr>';
   }
@@ -570,7 +635,7 @@ function executeCalculationEngine() {
   el['daysCount'].value = fmtUnits(split.totalDays);
   el['lightDaysCount'].value = fmtUnits(split.afterDays);
   el['splitNote'].textContent = split.totalDays
-    ? 'پێش ڕووناکی: ' + fmtUnits(mainUnits) + ' یەکە، دوای ڕووناکی: ' + fmtUnits(lightUnits) + ' یەکە'
+    ? 'پێش ڕووناکی: ' + fmtUnits(mainUnits) + ' یەکە، دوای ڕووناکی: ' + fmtUnits(lightUnits) + ' یەکە' + (solarUnits > 0 ? '، سۆلار: ' + fmtUnits(solarUnits) + ' یەکە کەم کراوەتەوە' : '')
     : 'هیچ دابەشکردنێک نییە، هەموو یەکەکان بە نرخی سەرەکی هەژمارکراون.';
 
   var sectionLabel = data.ku + ' (' + data.en + ')';
@@ -591,6 +656,8 @@ function executeCalculationEngine() {
   el['receiptCurrRead'].textContent = fmtUnits(currRead);
   el['receiptMultiplier'].textContent = fmtUnits(factor);
   el['receiptTransformerFee'].textContent = transformerMultiplier > 1 ? '× 1.025' : '× 1.000';
+  el['receiptGrossUnits'].textContent = fmtUnits(grossUnits) + ' یەکە';
+  el['receiptSolarUnits'].textContent = fmtUnits(solarUnits) + ' یەکە';
   el['receiptTableBody'].innerHTML = tableHtml;
   el['receiptGrandTotal'].textContent = fmtMoney(totalCost);
 
