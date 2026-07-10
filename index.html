@@ -315,6 +315,28 @@
       .receipt-sheet.dense .receipt-total #receiptGrandTotal { font-size: 12px; }
       .receipt-sheet.dense .receipt-footnote,
       .receipt-sheet.dense .page-credit { font-size: 7px; margin-top: 3px; }
+
+      .receipt-sheet.ultra-dense { padding: 5px 10px 4px; }
+      .receipt-sheet.ultra-dense .receipt-header { padding-bottom: 3px; margin-bottom: 4px; }
+      .receipt-sheet.ultra-dense .receipt-title { font-size: 12px; }
+      .receipt-sheet.ultra-dense .receipt-subtitle { font-size: 8px; margin-top: 1px; }
+      .receipt-sheet.ultra-dense .receipt-badge { font-size: 8px; padding: 2px 6px; }
+      .receipt-sheet.ultra-dense .receipt-grid,
+      .receipt-sheet.ultra-dense .receipt-summary { gap: 3px; margin-bottom: 4px; }
+      .receipt-sheet.ultra-dense .receipt-box { padding: 2px 5px; }
+      .receipt-sheet.ultra-dense .receipt-box .label { font-size: 7px; margin-bottom: 0; }
+      .receipt-sheet.ultra-dense .receipt-box .value { font-size: 8.5px; }
+      .receipt-sheet.ultra-dense .receipt-summary .receipt-box .value { font-size: 9px; }
+      .receipt-sheet.ultra-dense .receipt-table { font-size: 7px; margin-top: 1px; }
+      .receipt-sheet.ultra-dense .receipt-table th,
+      .receipt-sheet.ultra-dense .receipt-table td { padding: 1px 3px; }
+      .receipt-sheet.ultra-dense .table-group-header td { padding: 1px 3px; }
+      .receipt-sheet.ultra-dense .receipt-total { margin-top: 4px; padding: 3px 7px; font-size: 10px; }
+      .receipt-sheet.ultra-dense .receipt-total .rt-label,
+      .receipt-sheet.ultra-dense .receipt-total .rt-suffix { font-size: 8.5px; }
+      .receipt-sheet.ultra-dense .receipt-total #receiptGrandTotal { font-size: 11px; }
+      .receipt-sheet.ultra-dense .receipt-footnote,
+      .receipt-sheet.ultra-dense .page-credit { font-size: 6.5px; margin-top: 2px; }
     }
   </style>
 </head>
@@ -663,7 +685,15 @@ function executeCalculationEngine() {
 
   var rowCount = (tableHtml.match(/<tr/g) || []).length;
   var receiptSheet = document.getElementById('receiptSheet');
-  if (receiptSheet) receiptSheet.classList.toggle('dense', rowCount > 8);
+  if (receiptSheet) {
+    receiptSheet.classList.toggle('dense', rowCount > 8);
+    receiptSheet.classList.toggle('ultra-dense', rowCount > 16);
+    var zoomFactor = 1;
+    if (rowCount > 16) {
+      zoomFactor = Math.max(0.55, 16 / rowCount);
+    }
+    receiptSheet.style.zoom = zoomFactor;
+  }
 }
 
 function printReceipt() {
